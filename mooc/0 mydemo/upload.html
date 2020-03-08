@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue</title>
+    <!-- <script src="../vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update"/>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            methods: {
+                update: function (e){
+                    let file = e.target.files[0];
+                    let param = new FormData(); //创建form对象
+                    param.append('file',file);//通过append向form对象添加数据
+                    console.log(param.get('file')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+                    let config = {
+                    headers:{'Content-Type':'multipart/form-data'}
+                    }; //添加请求头
+                    this.$http.post('http://47.56.162.122:8341/api/create/upload',param,config)
+                    .then(response=>{
+                        console.log(response.data);
+                    })
+                }
+            }
+        })
+    </script>
+    
+</body>
+</html>
